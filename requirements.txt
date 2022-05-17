@@ -1,0 +1,7 @@
+jsonpath-ng==1.5.3
+pytest==6.2.5
+pytest-bdd==5.0.0
+PyYAML==6.0
+redis==4.1.0
+requests==2.27.1
+uncurl==0.0.11
