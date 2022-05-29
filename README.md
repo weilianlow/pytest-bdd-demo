@@ -34,9 +34,9 @@ This project show cases backend testing using pytest-bdd.
 |-------------|-------------------------------------------------------|--------------------------------------------------------------|
 | All         | pytest                                                | pytest                                                       |
 | Folder      | pytest ${folder}                                      | pytest tests/mixer/step_defs/                                |
-| Module      | pytest ${folder}/${module}                            | pytest tests/mixer/step_defs/test_ab_testing.py             |
-| Scenario    | pytest ${folder}/${module}::${scenario}               | pytest tests/mixer/step_defs/test_ab_testing.py::test_1     |
-| Iteration   | pytest ${folder}/${module}::${scenario}[${iteration}] | pytest tests/mixer/step_defs/test_ab_testing.py::test_1[i-1]|
+| Module      | pytest ${folder}/${module}                            | pytest tests/mixer/step_defs/test_ab_testing.py              |
+| Scenario    | pytest ${folder}/${module}::${scenario}               | pytest tests/mixer/step_defs/test_ab_testing.py::test_1      |
+| Iteration   | pytest ${folder}/${module}::${scenario}[${iteration}] | pytest tests/mixer/step_defs/test_ab_testing.py::test_1[i-1] |
 
 ## Generate Report
    ```sh
