@@ -1,5 +1,5 @@
 # pytest-bdd-demo
-This project covers the backend testing for recommendation using pytest-bdd.
+This project show cases backend testing using pytest-bdd.
 
 ## Installation
 1. Git clone git repo.
