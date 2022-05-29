@@ -1,7 +1,7 @@
 import json
 import uncurl
 import requests
-from utils.text import sanitise_dict
+from utils.text import sanitise_data
 
 
 def http_request(**kwargs):
@@ -18,8 +18,7 @@ def http_curl_request(curl):
             kwargs[field[1]] = field[0]
     # omit empty values passed from examples table
     if ctx.data:
-        data = sanitise_dict(kwargs['data'])
-        kwargs['data'] = f'{{{data}}}'
+        kwargs['data'] = sanitise_data(kwargs['data'])
     return http_request(**kwargs)
 
 

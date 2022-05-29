@@ -1,5 +1,5 @@
-# pytest-bdd-demo
-This project provides a demo on how pytest-bdd works.
+# new-rcmd-api-test
+This project covers the backend testing for recommendation using pytest-bdd.
 
 ## Installation
 1. Git clone git repo.
@@ -9,7 +9,7 @@ This project provides a demo on how pytest-bdd works.
     ```sh
     # For Python 2
     virtualenv venv
-
+   
     # For Python 3
     python3 -m venv venv
     ```
@@ -18,14 +18,14 @@ This project provides a demo on how pytest-bdd works.
    ```sh
    # Pycharm
    Preferences → Project → Python Interpreter
-
+   
    # VS Code
    ```
 5. Install project dependencies via requirements.txt.
     ```sh
     # For Python 2
     pip install -r requirements.txt
-
+   
     # For Python 3
     pip3 install -r requirements.txt
     ```
@@ -34,9 +34,9 @@ This project provides a demo on how pytest-bdd works.
 |-------------|-------------------------------------------------------|--------------------------------------------------------------|
 | All         | pytest                                                | pytest                                                       |
 | Folder      | pytest ${folder}                                      | pytest tests/mixer/step_defs/                                |
-| Module      | pytest ${folder}/${module}                            | pytest tests/mixer/step_defs/test_ab_testing.py              |
-| Scenario    | pytest ${folder}/${module}::${scenario}               | pytest tests/mixer/step_defs/test_ab_testing.py::test_1      |
-| Iteration   | pytest ${folder}/${module}::${scenario}[${iteration}] | pytest tests/mixer/step_defs/test_ab_testing.py::test_1[i-1] |
+| Module      | pytest ${folder}/${module}                            | pytest tests/mixer/step_defs/test_ab_testing.py             |
+| Scenario    | pytest ${folder}/${module}::${scenario}               | pytest tests/mixer/step_defs/test_ab_testing.py::test_1     |
+| Iteration   | pytest ${folder}/${module}::${scenario}[${iteration}] | pytest tests/mixer/step_defs/test_ab_testing.py::test_1[i-1]|
 
 ## Generate Report
    ```sh

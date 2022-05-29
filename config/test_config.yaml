@@ -1,1 +1,3 @@
-google_sg: https://www.google.com.sg 
+redis:
+  host: null
+  port: null

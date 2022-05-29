@@ -1,12 +1,11 @@
 import os
 import os.path
 import pytest
-import sys
 from pytest_bdd import given, when, then, parsers
 from utils.http import http_curl_request, http_response_attribute
 from utils.parser import load_from_file, load_from_text, get_json_path
 from utils.redis import new_redis_client, new_redis_client_from_text
-from utils.text import replace_text, sanitise_list
+from utils.text import replace_text, sanitise_list, sanitise_data
 
 
 # hooks
@@ -24,7 +23,7 @@ def pytest_bdd_before_step_call(request, feature, scenario, step, step_func, ste
                 step_func_args[key] = replace_text(data, value)
 
 
-def pytest_bdd_step_error(request, feature, scenario, step, step_func, step_func_args,exception):
+def pytest_bdd_step_error(request, feature, scenario, step, step_func, step_func_args, exception):
     print('\n-----Step Print Out-----')
     print(step)
     print('\n-----Step_func Print Out-----')
@@ -43,8 +42,9 @@ def environment_config():
         if not env:
             env = os.environ.get('env')
         env = env.lower().strip() if env else ''
-        target_config = os.path.join(sys.path[1], 'config', f'{env}_config.yaml')
-        default_config = os.path.join(sys.path[1], 'config', 'default_config.yaml')
+        root = os.path.dirname(__file__)
+        target_config = os.path.join(root, '..', 'config', f'{env}_config.yaml')
+        default_config = os.path.join(root, '..', 'config', 'default_config.yaml')
         if env and os.path.exists(target_config):
             return load_from_file('yaml', target_config)
         elif os.path.exists(default_config):
@@ -87,7 +87,7 @@ def data_is_set_from_the_following_parse_type_config(context, parse_type, text):
 @when(parsers.parse("the following http curl response is saved as {response_name}:\n{text}"))
 def the_following_http_curl_response_is_save_as_response_name(context, response_name, text):
     res = http_curl_request(text)
-    if not res:
+    if not res.content:
         raise ValueError(f'response not returned from curl:{text}')
     context[response_name] = res
 
@@ -118,10 +118,10 @@ def the_redis_key_should_assert_existence(context, key, assert_existence):
 @then(parsers.parse("the {attribute} for {response} should be {expected_value}"))
 def the_attribute_for_response_should_be_expected_value(context, attribute, response, expected_value):
     res = context.get(response, None)
-    if not res:
+    if not res.content:
         raise ValueError(f'response:{response} not found in context')
     assert_statement = http_response_attribute(res, attribute, expected_value)
-    if not assert_statement:
+    if assert_statement is None:
         raise ValueError(f'attribute:{attribute} not found in response:{response}')
     assert assert_statement
 
@@ -129,20 +129,23 @@ def the_attribute_for_response_should_be_expected_value(context, attribute, resp
 @then(parsers.parse("the JSONPath {jsonpath} value for {response} should match {expected}"))
 def the_jsonpath_value_for_response_should_match_expected(context, jsonpath, response, expected):
     res = context.get(response, None)
-    if not res:
+    if not res.content:
         raise ValueError(f'response:{response} not found in context')
 
     def compare(act, exp):
-        return eval(str(act) + str(exp)) if str(exp)[:1] in ['<', '>', '='] else str(act) == str(exp)
+        if str(exp)[:1] in ['<', '>', '=']:
+            return eval(str(act) + str(exp))
+        else:
+            return act == exp
 
     try:
         actual = get_json_path(jsonpath, res.json())
-        data = sanitise_list(expected)
+        data = sanitise_data(expected, output_type='raw')
         if len(actual) > 0:
-            for i, expected_value in enumerate(eval(f'[{data}]')):
+            for i, expected_value in enumerate(data):
                 assert compare(actual[i], expected_value)
         else:
-            assert compare(actual, eval(f'[{data}]'))
+            assert compare(actual, data)
 
     except Exception as e:
         raise e
@@ -151,7 +154,7 @@ def the_jsonpath_value_for_response_should_match_expected(context, jsonpath, res
 @then(parsers.parse("the jsonpath {jsonpath} value for {response} {decision} contain {expected}"))
 def the_jsonpath_value_for_response_should_not_contain_expected(context, jsonpath, response, decision, expected):
     res = context.get(response, None)
-    if not res:
+    if not res.content:
         raise ValueError(f'response:{response} not found in context')
     try:
         actual = get_json_path(jsonpath, res.json())
