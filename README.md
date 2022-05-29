@@ -1,4 +1,4 @@
-# new-rcmd-api-test
+# pytest-bdd-demo
 This project covers the backend testing for recommendation using pytest-bdd.
 
 ## Installation
