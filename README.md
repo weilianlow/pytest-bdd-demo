@@ -2,7 +2,7 @@
 This project show cases backend testing using pytest-bdd.
 
 ## Installation
-1. Git clone git repo.
+1. Git clone git repo. 
 
 2. Create a virtual environment in the root folder of the git repo.<br/>
 **Note**: ```pip install virtualenv``` if ```pip freeze|grep virtualenv``` returns empty.
